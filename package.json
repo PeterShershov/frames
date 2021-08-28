@@ -1,0 +1,46 @@
+{
+  "name": "react-picture-frames",
+  "version": "1.0.0",
+  "description": "Stylable App",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "webpack --mode production --no-devtool",
+    "start": "webpack serve --open",
+    "serve": "serve ./dist",
+    "lint": "eslint . -f codeframe",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck && npm run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@stylable/runtime": "^4.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@stylable/core": "^4.6.0",
+    "@stylable/webpack-plugin": "^4.6.0",
+    "@types/react": "^17.0.19",
+    "@types/react-dom": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-stylable": "^4.6.0",
+    "html-webpack-plugin": "^5.3.2",
+    "rimraf": "^3.0.2",
+    "serve": "^12.0.0",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.2",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.0.0"
+  }
+}

@@ -1,0 +1,38 @@
+.root {
+    -st-states: spacing;
+    --spacingWidth: 12px;
+    --frameWidth: 12px;
+    --color: black;
+    width: min-content;
+    height: min-content;
+    background: #fefdf7;
+    border: var(--frameWidth) solid var(--color);
+    border-radius: 2px;
+    position: relative;
+}
+
+.root::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: inset 0px 0px 12px rgba(0, 0,0,0.2);
+    pointer-events: none;;
+}
+
+.root::after {
+    pointer-events: none;;
+    content: "";
+    position: absolute;
+    top: var(--spacingWidth);
+    bottom: var(--spacingWidth);
+    left: var(--spacingWidth);
+    right: var(--spacingWidth);
+    box-shadow: inset 0px 0px 3px rgba(0, 0,0,0.3);
+}
+
+.root:spacing {
+    padding: var(--spacingWidth);
+}
