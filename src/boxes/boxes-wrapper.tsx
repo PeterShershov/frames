@@ -1,15 +1,12 @@
 import { ChangeEventHandler, memo, useState } from 'react';
 import { Frame } from '../commons/components/frame/frame';
-import { MIN_RHOMBUS_HEIGHT, MIN_RHOMBUS_WIDTH } from './constants';
-import { Untitled } from './untitled';
-import { classes } from './untitled-wrapper.st.css';
+import { Boxes } from './boxes';
+import { classes } from './boxes-wrapper.st.css';
 
-export const UntitledWrapper = memo(function UntitledWrapper() {
+export const BoxesWrapper = memo(function BoxesWrapper() {
     const [canvasWidth, setCanvasWidth] = useState(340);
     const [canvasHeight, setCanvasHeight] = useState(440);
-    const [minWidth, setMinWidth] = useState(MIN_RHOMBUS_WIDTH);
     const [canvasBackground, setCanvasBackground] = useState('#e6e1da');
-    const [minHeight, setMinHeight] = useState(MIN_RHOMBUS_HEIGHT);
 
     const handleCanvasBackgroundChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setCanvasBackground(e.currentTarget.value);
@@ -23,31 +20,13 @@ export const UntitledWrapper = memo(function UntitledWrapper() {
         setCanvasHeight(parseInt(e.currentTarget.value, 10));
     };
 
-    const handleMinWidthChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const width = parseInt(e.currentTarget.value, 10);
-
-        if (width > 1) {
-            setMinWidth(width);
-        }
-    };
-
-    const handleMinHeightChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const height = parseInt(e.currentTarget.value, 10);
-
-        if (height > 1) {
-            setMinHeight(height);
-        }
-    };
-
     return (
         <div className={classes.root}>
-            <Frame color={'#333'} frameWidth={12}>
-                <Untitled
+            <Frame color={'#2c2b2a'} frameWidth={12}>
+                <Boxes
                     canvasBackground={canvasBackground}
                     canvasHeight={canvasHeight}
                     canvasWidth={canvasWidth}
-                    minHeight={minHeight}
-                    minWidth={minWidth}
                 />
             </Frame>
             <div className={classes.controls}>
@@ -78,23 +57,6 @@ export const UntitledWrapper = memo(function UntitledWrapper() {
                         value={canvasHeight}
                         type="number"
                         onChange={handleCanvasHeightChange}
-                    />
-                </div>
-
-                <div className={classes.control}>
-                    <label htmlFor={'width'}>Rhombus Width</label>
-                    <input
-                        id={'width'}
-                        value={minWidth}
-                        type="number"
-                        onChange={handleMinWidthChange}
-                    />
-                    <label htmlFor={'height'}>Rhombus Height</label>
-                    <input
-                        id={'height'}
-                        value={minHeight}
-                        type="number"
-                        onChange={handleMinHeightChange}
                     />
                 </div>
             </div>
