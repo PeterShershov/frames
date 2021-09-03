@@ -4,7 +4,7 @@ import { Boxes } from './boxes';
 import { classes } from './boxes-wrapper.st.css';
 
 export const BoxesWrapper = memo(function BoxesWrapper() {
-    const [canvasWidth, setCanvasWidth] = useState(340);
+    const [canvasWidth, setCanvasWidth] = useState(1200);
     const [canvasHeight, setCanvasHeight] = useState(440);
     const [canvasBackground, setCanvasBackground] = useState('#e6e1da');
 

@@ -22,7 +22,7 @@ interface BoxesProps {
     canvasWidth: number;
     canvasBackground: string;
 }
-const arr = Array.from({ length: 20 }, Math.random);
+const arr = Array.from({ length: 10 }, Math.random);
 
 export const Boxes = memo<BoxesProps>(function Boxes({
     canvasHeight,
@@ -32,16 +32,15 @@ export const Boxes = memo<BoxesProps>(function Boxes({
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [scale] = useState(1);
 
-    const boxes = createBoxes(canvasRef, 41, 20);
-
     useEffect(() => {
         if (canvasRef.current) {
+            const boxes = createBoxes(canvasRef, 10, 20);
             const context = canvasRef.current.getContext('2d');
             if (context) {
                 draw({ scale, context, canvasRef, boxes });
             }
         }
-    }, [scale, canvasHeight, canvasWidth, boxes]);
+    }, [scale, canvasHeight, canvasWidth]);
 
     return (
         <div style={{ background: canvasBackground, padding: '10px' }}>
@@ -69,21 +68,23 @@ function draw({
             context.canvas.height = scale * canvasRef.current.height;
             context.scale(scale, scale);
         }
-
+        const arr = [-1, 1];
         if (context) {
-            // const arr = [1, -1];
-
+            console.log(t, Math.cos(t), Math.sin(t));
             for (const [index, box] of boxes.entries()) {
-                // box.x += arr[index % arr.length];
-                box.x =
-                    Math.abs(Math.sin(t * Math.PI * 2 * arr[index])) * 20 +
-                    index * Math.abs(Math.sin(t)) * 22 +
-                    11;
+                //                            dis  startX
+                box.x = index * Math.sin(t) * 50 + 600;
+                box.y += index * Math.sin(t) * 0.05 * arr[index % arr.length];
 
-                box.y =
-                    Math.abs(Math.sin(t * Math.PI * 2 * arr[arr.length - 1 - index])) * 20 +
-                    index * Math.abs(Math.sin(t)) * 22 +
-                    11;
+                // box.y +=
+                //     (Math.sin(t * Math.PI * 4 * arr[index]) * 1 + index * Math.sin(t) * 5 + 600) *
+                //     0.002;
+                //
+
+                // box.y =
+                //     Math.abs(Math.sin(t * Math.PI * 2 * arr[arr.length - 1 - index])) * 20 +
+                //     index * Math.abs(Math.sin(t)) * 22 +
+                //     11;
 
                 // box.x += (Math.random() - 0.5) * 7;
                 // box.y += (Math.random() - 0.5) * 7;
@@ -105,8 +106,8 @@ function createBoxes(canvasRef: React.RefObject<HTMLCanvasElement>, numberOfBoxe
 
     for (let i = 1; i <= numberOfBoxes; i++) {
         const box: Partial<Box> = {};
-        // const randomPoint = randomPointInCanvas(canvasRef);
-        const randomPoint = [randomNumber(20, 100), randomNumber(20, 100)];
+        const randomPoint = randomPointInCanvas(canvasRef, seed);
+        // const randomPoint = [randomNumber(20, 100), randomNumber(20, 100)];
         box.x = randomPoint[0];
         box.y = randomPoint[1];
         box.width = size;
@@ -128,10 +129,12 @@ function drawBox({
     offsetBox?: Box;
 }) {
     context.beginPath();
-    context.strokeStyle = `hsl(100%, 100%, 70%)`;
+    context.strokeStyle = `hsl(221, ${randomNumber(50, 100)}%, 70%)`;
+    context.fillStyle = `hsla(221, ${randomNumber(50, 100)}%, 70%, 0.1)`;
 
     context.rect(x, y, width, height);
     context.stroke();
+    context.fill();
     context.closePath();
 
     if (offsetBox) {
@@ -140,7 +143,6 @@ function drawBox({
         context.moveTo(x + width, y);
         context.lineTo(offsetBox.x + width, offsetBox.y);
         context.closePath();
-
         context.moveTo(x, y + height);
         context.lineTo(offsetBox.x, offsetBox.y + height);
         context.moveTo(x + width, y + height);
@@ -148,5 +150,6 @@ function drawBox({
         context.closePath();
     }
 
+    context.fill();
     context.stroke();
 }

@@ -9,7 +9,7 @@ export interface AppProps {
 export const App: React.VFC<AppProps> = ({ className }) => {
     return (
         <main className={st(classes.root, className)}>
-            <UntitledWrapper />
+            {/* <UntitledWrapper /> */}
             <BoxesWrapper />
         </main>
     );
