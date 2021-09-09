@@ -88,8 +88,8 @@ function draw({
                 // }
 
                 // x = (((x - x_min) % (x_max - x_min)) + (x_max - x_min)) % (x_max - x_min) + x_min;
-                box.x = ((x % canvas.width) + canvas.width) % canvas.width;
                 // box.y = ((y % canvas.height) + canvas.height) % canvas.height;
+                box.x = ((x % canvas.width) + canvas.width) % canvas.width;
                 box.y = y;
             }
         }
