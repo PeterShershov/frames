@@ -1,11 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Canvas } from '../commons/components/canvas/canvas';
-import {
-    randomEntryInArray,
-    randomNumber,
-    randomPointInCanvas,
-    RNG,
-} from '../commons/utils/random';
+import { randomNumber, randomPointInCanvas, RNG } from '../commons/utils/random';
 
 const seed = RNG(Math.random());
 const startTime = Date.now();
@@ -16,6 +11,8 @@ interface Box {
     width: number;
     height: number;
 }
+
+const RECT_SIZE = 10;
 
 interface BoxesProps {
     canvasHeight: number;
@@ -32,10 +29,10 @@ export const Boxes = memo<BoxesProps>(function Boxes({
 
     useEffect(() => {
         if (canvasRef.current) {
-            const boxes = createBoxes(canvasRef, 60, 10);
+            const boxes = createBoxes(canvasRef, 15, RECT_SIZE);
             const context = canvasRef.current.getContext('2d');
             if (context) {
-                draw({ scale, context, canvasRef, boxes });
+                draw({ scale, context, canvas: canvasRef.current, boxes });
             }
         }
     }, [scale, canvasHeight, canvasWidth]);
@@ -48,64 +45,56 @@ export const Boxes = memo<BoxesProps>(function Boxes({
 });
 
 function draw({
-    canvasRef,
+    canvas,
     context,
     scale,
     boxes,
 }: {
-    canvasRef: React.RefObject<HTMLCanvasElement>;
+    canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
     scale: number;
     boxes: Box[];
 }) {
     requestAnimationFrame(() => {
-        const t = (Date.now() - startTime) / 3000;
-        if (context && canvasRef.current) {
-            context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            context.canvas.width = scale * canvasRef.current.width;
-            context.canvas.height = scale * canvasRef.current.height;
+        const t = (Date.now() - startTime) / 1000;
+        if (context) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.canvas.width = scale * canvas.width;
+            context.canvas.height = scale * canvas.height;
             context.scale(scale, scale);
         }
         const arr = [-1, 1];
+
         if (context) {
             for (const [index, box] of boxes.entries()) {
                 drawBox({
                     baseBox: box,
                     context,
                     offsetBox: boxes[index + 1],
-                    index,
                 });
+                const normalizedRange = (index / boxes.length) * 4;
+                const x =
+                    (normalizedRange * (Math.sin(t) * (canvas.width - RECT_SIZE / 2 - 6))) / 2 +
+                    canvas.width / 2 -
+                    RECT_SIZE / 2;
+                const y = Math.abs(box.y + index * Math.sin(t) * 0.2 * arr[index % arr.length]);
 
-                const intX = index * Math.sin(t) * 30 + canvasRef.current!.width / 2;
-                const x = Math.abs(intX);
-                const y = Math.abs(box.y + index * Math.sin(t) * 0.02 * arr[index % arr.length]);
+                // if (x < 0) {
+                //     box.x = Math.abs(x);
+                // } else if (x > canvas.width) {
+                //     box.x = canvas.width + canvas.width - x;
+                // } else {
+                //     box.x = x;
+                // }
 
-                if (canvasRef.current && x > canvasRef.current.width - 20) {
-                    const shiftedX =
-                        Math.abs(intX) -
-                        (x - canvasRef.current.width) -
-                        31 -
-                        index * Math.sin(t) * 30 +
-                        canvasRef.current.width / 2;
-                    box.x = Math.abs(shiftedX);
-                } else {
-                    box.x = x;
-                }
-                if (canvasRef.current && y > canvasRef.current.height - 20) {
-                    const shiftedY =
-                        Math.abs(box.y + index * Math.sin(t) * 0.02 * arr[index % arr.length]) -
-                        (y - canvasRef.current.height) -
-                        21 -
-                        index * Math.sin(t) * 0.02 * arr[index % arr.length];
-
-                    box.y = shiftedY;
-                } else {
-                    box.y = y;
-                }
+                // x = (((x - x_min) % (x_max - x_min)) + (x_max - x_min)) % (x_max - x_min) + x_min;
+                box.x = ((x % canvas.width) + canvas.width) % canvas.width;
+                // box.y = ((y % canvas.height) + canvas.height) % canvas.height;
+                box.y = y;
             }
         }
 
-        draw({ canvasRef, context, scale, boxes });
+        draw({ canvas, context, scale, boxes });
     });
 }
 
@@ -129,16 +118,14 @@ function drawBox({
     context,
     baseBox: { x, y, width, height },
     offsetBox,
-    index,
 }: {
-    index: number;
     context: CanvasRenderingContext2D;
     baseBox: Box;
     offsetBox?: Box;
 }) {
     context.beginPath();
-    context.strokeStyle = `hsl(20, ${randomNumber(50, 100, seed)}%, ${(index / 100) * 100 + 20}%)`;
-    context.fillStyle = `hsla(221, ${randomNumber(50, 100, seed)}%, ${(index / 100) * 100}%,  0.2)`;
+    context.strokeStyle = `hsl(20, ${randomNumber(50, 100, seed)}%, ${100 * 100 + 20}%)`;
+    context.fillStyle = `hsla(221, ${randomNumber(50, 100, seed)}%, ${100 * 100}%,  0.2)`;
 
     context.rect(x, y, width, height);
     context.stroke();

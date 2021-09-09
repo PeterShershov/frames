@@ -5,7 +5,7 @@ import { classes } from './boxes-wrapper.st.css';
 
 export const BoxesWrapper = memo(function BoxesWrapper() {
     const [canvasWidth, setCanvasWidth] = useState(1200);
-    const [canvasHeight, setCanvasHeight] = useState(440);
+    const [canvasHeight, setCanvasHeight] = useState(540);
     const [canvasBackground, setCanvasBackground] = useState('#1d1c1b');
 
     const handleCanvasBackgroundChange: ChangeEventHandler<HTMLInputElement> = (e) => {
