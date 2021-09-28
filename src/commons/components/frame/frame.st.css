@@ -1,4 +1,8 @@
 .root {
+    position: relative;;
+}
+
+.frame {
     -st-states: spacing;
     --spacingWidth: 12px;
     --frameWidth: 12px;
@@ -11,7 +15,7 @@
     position: relative;
 }
 
-.root::before {
+.frame::before {
     content: "";
     position: absolute;
     top: 0;
@@ -22,7 +26,7 @@
     pointer-events: none;;
 }
 
-.root::after {
+.frame::after {
     pointer-events: none;;
     content: "";
     position: absolute;
@@ -33,6 +37,33 @@
     box-shadow: inset 0px 0px 3px rgba(0, 0,0,0.3);
 }
 
-.root:spacing {
+.frame:spacing {
     padding: var(--spacingWidth);
+}
+
+.widthResizer { 
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    transform: translateX(50%);
+    width: 12px;
+    cursor: grab;
+    background: red;
+}
+
+.widthResizer:active,
+.heightResizer:active {
+    cursor: grabbing;
+}
+
+.heightResizer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transform: translateY(50%);
+    height: 12px;
+    cursor: grab;
+    background: red;
 }

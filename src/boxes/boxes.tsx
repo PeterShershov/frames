@@ -4,6 +4,7 @@ import { randomNumber, randomPointInCanvas, RNG } from '../commons/utils/random'
 
 const seed = RNG(Math.random());
 const startTime = Date.now();
+const SPREAD = 2;
 
 interface Box {
     x: number;
@@ -56,7 +57,7 @@ function draw({
     boxes: Box[];
 }) {
     requestAnimationFrame(() => {
-        const t = (Date.now() - startTime) / 1000;
+        const t = (Date.now() - startTime) / 2000;
         if (context) {
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.canvas.width = scale * canvas.width;
@@ -72,7 +73,7 @@ function draw({
                     context,
                     offsetBox: boxes[index + 1],
                 });
-                const normalizedRange = (index / boxes.length) * 4;
+                const normalizedRange = (index / boxes.length) * SPREAD;
                 const x =
                     (normalizedRange * (Math.sin(t) * (canvas.width - RECT_SIZE / 2 - 6))) / 2 +
                     canvas.width / 2 -
@@ -89,7 +90,13 @@ function draw({
 
                 // x = (((x - x_min) % (x_max - x_min)) + (x_max - x_min)) % (x_max - x_min) + x_min;
                 // box.y = ((y % canvas.height) + canvas.height) % canvas.height;
-                box.x = ((x % canvas.width) + canvas.width) % canvas.width;
+                // if (Math.floor(x / canvas.width) % 2 === 0) {
+                //     debugger;
+                // }
+
+                // const shouldGoRight = Math.floor(x / canvas.width) % 2;
+
+                box.x = Math.abs(x);
                 box.y = y;
             }
         }
@@ -148,3 +155,20 @@ function drawBox({
     context.fill();
     context.stroke();
 }
+
+animate({
+    cycles: 3,
+    ease: 'linear',
+    boomerang: true,
+    duration: 3000,
+    path: [
+        { x: 3, y: 6 },
+        { x: 5, y: 10 },
+        { x: 22, y: 102 },
+    ],
+    update: (currentValue) => {
+        draw(currentValue);
+    },
+    // origin: { x: 3, y: 6 },
+    // target: { x: 31, y: 61 },
+});
